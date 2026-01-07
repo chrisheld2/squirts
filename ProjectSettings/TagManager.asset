@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - Ground
+  - Starting Spot
+  - Signal
+  - Fog
+  - BlocksLight
+  - Block
+  - Climbable
+  - Water
+  - Damage
+  - Goal
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Background
+  - Solid
+  - Player
+  - MoveableObjects
+  - Foliage
+  - Climbable
+  - Swap
+  - groundLayer
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: BackgroundBack
+    uniqueID: 2485066727
+    locked: 0
+  - name: Background
+    uniqueID: 3609630559
+    locked: 0
+  - name: ParticlesBack
+    uniqueID: 512412895
+    locked: 0
+  - name: BlocksBack
+    uniqueID: 1450877501
+    locked: 0
+  - name: Player
+    uniqueID: 1909174691
+    locked: 0
+  - name: FoliageBack
+    uniqueID: 253592985
+    locked: 0
+  - name: Blocks
+    uniqueID: 264822031
+    locked: 0
+  - name: Foliage
+    uniqueID: 1441651981
+    locked: 0
+  - name: Interactive
+    uniqueID: 4257651439
+    locked: 0
+  - name: BlocksInner
+    uniqueID: 818104175
+    locked: 0
+  - name: MovableObjects
+    uniqueID: 884375587
+    locked: 0
+  - name: BlocksFront
+    uniqueID: 3180252319
+    locked: 0
+  - name: Particles
+    uniqueID: 4115934275
+    locked: 0
+  - name: Null
+    uniqueID: 3675995193
+    locked: 0
+  - name: UI
+    uniqueID: 3676952443
+    locked: 0
+  m_RenderingLayers:
+  - Default

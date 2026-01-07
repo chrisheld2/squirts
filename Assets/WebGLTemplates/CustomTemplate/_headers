@@ -1,0 +1,15 @@
+# Netlify/Cloudflare Pages _headers file for Unity WebGL
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' blob: wss://tbp-server-fgh4bebufufactca.centralus-01.azurewebsites.net https://tbp-server-fgh4bebufufactca.centralus-01.azurewebsites.net ws://127.0.0.1:5503 https://cdn.play.unity.com https://cdn.staging.play.unity.com https://*.struckd.com https://*.cloudfront.net https://*.gstatic.com https://*.sentry-cdn.com https://*.googletagmanager.com https://*.sentry.io https://cdp.cloud.unity3d.com https://config.uca.cloud.unity3d.com https://collect.analytics.unity3d.com https://player-auth.services.api.unity.com https://*.googleapis.com wss://*.exitgames.com:* https://*.cesium.com https://*.virtualearth.net; img-src 'self' data: blob:; font-src 'self'; worker-src 'self' blob:;
+
+/*.unityweb
+  Content-Type: application/octet-stream
+  Content-Encoding: gzip
+
+/*.wasm
+  Content-Type: application/wasm
+
+/*.data
+  Content-Type: application/octet-stream
+  Content-Encoding: gzip

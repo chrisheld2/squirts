@@ -1,0 +1,1 @@
+Remove Position from CacheSyncData for the CrateHitBoxes

@@ -1,0 +1,5 @@
+{
+    "url": "wss://tbp-server-fgh4bebufufactca.centralus-01.azurewebsites.net",
+    "urlDev": "ws://127.0.0.1:5503",
+    "MessageDebug": true
+}

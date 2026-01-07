@@ -1,0 +1,29 @@
+# Apache .htaccess for Unity WebGL with Azure WebSocket CSP
+
+# Set Content Security Policy header to allow Azure WebSocket connections
+<IfModule mod_headers.c>
+    # CSP includes all Unity's default domains PLUS your Azure server
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' blob: wss://tbp-server-fgh4bebufufactca.centralus-01.azurewebsites.net https://tbp-server-fgh4bebufufactca.centralus-01.azurewebsites.net ws://127.0.0.1:5503 https://cdn.play.unity.com https://cdn.staging.play.unity.com https://*.struckd.com https://*.cloudfront.net https://*.gstatic.com https://*.sentry-cdn.com https://*.googletagmanager.com https://*.sentry.io https://cdp.cloud.unity3d.com https://config.uca.cloud.unity3d.com https://collect.analytics.unity3d.com https://player-auth.services.api.unity.com https://*.googleapis.com wss://*.exitgames.com:* https://*.cesium.com https://*.virtualearth.net; img-src 'self' data: blob:; font-src 'self'; worker-src 'self' blob:;"
+</IfModule>
+
+# Set MIME types for Unity WebGL files
+<IfModule mod_mime.c>
+    AddType application/octet-stream .unityweb
+    AddType application/wasm .wasm
+    AddType application/octet-stream .data
+    AddType application/json .symbols.json
+</IfModule>
+
+# Enable gzip compression for Unity files
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE application/octet-stream
+    AddOutputFilterByType DEFLATE application/wasm
+    AddOutputFilterByType DEFLATE application/javascript
+</IfModule>
+
+# Set proper encoding for pre-compressed .unityweb files
+<FilesMatch "\.unityweb$">
+    <IfModule mod_headers.c>
+        Header set Content-Encoding gzip
+    </IfModule>
+</FilesMatch>
