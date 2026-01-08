@@ -3351,7 +3351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::USMGame
   noLevelInit: 1
   gameMode: 1
-  gameSpeedInspector: 1
+  gameSpeedInspector: 0.7
   randomSeed: 1234
 --- !u!4 &844891202
 Transform:
@@ -5616,7 +5616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4993413646378935130, guid: 93566d5d248ef418b8e286863a0f7c08, type: 3}
       propertyPath: m_ConnectedAnchor.y
-      value: -0.47000027
+      value: -0.4699993
       objectReference: {fileID: 0}
     - target: {fileID: 8910420636286645492, guid: 93566d5d248ef418b8e286863a0f7c08, type: 3}
       propertyPath: m_Name
