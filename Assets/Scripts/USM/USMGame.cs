@@ -40,6 +40,11 @@ public class USMGame : MonoBehaviour
     private float lastPlusKeyTime = -1f;
     private const float doubleTapThreshold = 0.2f; // Time window for double-tap detection
 
+    // Random Seed Settings
+    [Header("RANDOM SEED")]
+    [SerializeField] [Range(0, 100000)] private int randomSeed = 1234;
+    private Random.State randomState;
+
     #endregion
 
     #region Properties
@@ -144,6 +149,25 @@ public class USMGame : MonoBehaviour
             DL.Log($"[USMGame] Sent pause state update to network: {isPaused}", "cyan");
         }
     }
+
+    /// <summary>
+    /// Gets or sets the master random seed.
+    /// </summary>
+    public int RandomSeed
+    {
+        get => randomSeed;
+        set
+        {
+            randomSeed = value;
+            InitializeRandomState();
+        }
+    }
+
+    /// <summary>
+    /// Gets the current random state.
+    /// </summary>
+    public Random.State RandomState => randomState;
+
     #endregion
 
     #region Unity Lifecycle
@@ -151,8 +175,7 @@ public class USMGame : MonoBehaviour
     void Awake()
     {
         Folders.GAMEZONE.gameObject.SetActive(false);
-
-
+        InitializeRandomState();
     }
 
     void OnEnable()
@@ -625,6 +648,56 @@ public class USMGame : MonoBehaviour
         // For standalone builds, quit the application
         Application.Quit();
 #endif
+    }
+
+    #endregion
+
+    #region Random Utilities
+
+    /// <summary>
+    /// Initializes the random state using the current seed.
+    /// </summary>
+    public void InitializeRandomState()
+    {
+        Random.InitState(randomSeed);
+        randomState = Random.state;
+        DL.Log($"[USMGame] Random seed initialized: {randomSeed}", "magenta");
+    }
+
+    /// <summary>
+    /// Restores the global Random state to the stored session state.
+    /// </summary>
+    public void RestoreRandomState()
+    {
+        Random.state = randomState;
+    }
+
+    /// <summary>
+    /// Gets a random range using the stored random state and updates it.
+    /// Safely preserves any existing Random state.
+    /// </summary>
+    public int GetRandomRange(int min, int max)
+    {
+        Random.State oldState = Random.state;
+        RestoreRandomState();
+        int result = Random.Range(min, max);
+        randomState = Random.state;
+        Random.state = oldState;
+        return result;
+    }
+
+    /// <summary>
+    /// Gets a random value (0.0 to 1.0) using the stored random state and updates it.
+    /// Safely preserves any existing Random state.
+    /// </summary>
+    public float GetRandomValue()
+    {
+        Random.State oldState = Random.state;
+        RestoreRandomState();
+        float result = Random.value;
+        randomState = Random.state;
+        Random.state = oldState;
+        return result;
     }
 
     #endregion

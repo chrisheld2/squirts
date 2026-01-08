@@ -4,7 +4,6 @@ public class PixelBlock : MonoBehaviour
 {
     [SerializeField] private Color startColor = Color.white;
     [SerializeField] private Color endColor = Color.white;
-    [SerializeField] private int randomSeed = 1234;
 
     private Random.State randomState;
 
@@ -27,8 +26,17 @@ public class PixelBlock : MonoBehaviour
 
     private void InitializeRandomState()
     {
-        // Combine randomSeed with position for deterministic variety across blocks
-        int finalSeed = randomSeed + (int)(transform.position.x * 1000) + (int)(transform.position.y * 100);
+        int baseSeed = 1234;
+        
+        // Get the seed from USMGame
+        USMGame usmGame = FindFirstObjectByType<USMGame>();
+        if (usmGame != null)
+        {
+            baseSeed = usmGame.RandomSeed;
+        }
+
+        // Combine baseSeed with position for deterministic variety across blocks
+        int finalSeed = baseSeed + (int)(transform.position.x * 1000) + (int)(transform.position.y * 100);
         Random.InitState(finalSeed);
         randomState = Random.state;
     }

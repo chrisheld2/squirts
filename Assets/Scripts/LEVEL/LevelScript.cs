@@ -18,7 +18,6 @@ public class LevelScript : MonoBehaviour
     [SerializeField][Range(1, 10)] private int secondaryPathWidth = 3;
 
     [Header("PERLIN NOISE GENERATION")]
-    [SerializeField][Range(0, 10000)] private int randomSeed = 1234;
     [SerializeField][Range(0, 1)] private float perlinScale = .5f;
     [SerializeField][Range(0, 1)] private float perlinThreshold = .5f;
     [SerializeField][Range(0.01f, 2f)] private float perlinWidth = 0.1f;
@@ -80,7 +79,7 @@ public class LevelScript : MonoBehaviour
     private static string profileListKey = "LevelScript_ProfileList";
     private int[,] blockBackPatchMap;
     private int[,] decorationPatchMap;
-    private Random.State randomState;
+    private USMGame usmGame;
 
     #endregion
 
@@ -100,7 +99,6 @@ public class LevelScript : MonoBehaviour
     private const float DEFAULT_PERLIN_THRESHOLD = 0.5f;
     private const float DEFAULT_PERLIN_HEIGHT = 0.1f;
     private const float DEFAULT_PERLIN_WIDTH = 0.1f;
-    private const int DEFAULT_RANDOM_SEED = 1234;
     private const int DEFAULT_BLOCK_BACK_DISTANCE = 4;
     private const int DEFAULT_BLOCK_BACK_MIN_DISTANCE = 2;
     private const int DEFAULT_BLOCK_BACK_MAX_DISTANCE = 6;
@@ -120,7 +118,7 @@ public class LevelScript : MonoBehaviour
     public int heightGet() { return height; }
     public Vector2 positionStartGet() { return new Vector2(positionStart.x, positionStart.y); }
     public Vector2 positionEndGet() { return new Vector2(positionEnd.x, positionEnd.y); }
-    public int randomSeedGet { get { return randomSeed; } }
+    public int randomSeedGet { get { return usmGame != null ? usmGame.RandomSeed : 1234; } }
 
     #endregion
 
@@ -146,6 +144,7 @@ public class LevelScript : MonoBehaviour
 
     private void Awake()
     {
+        usmGame = FindFirstObjectByType<USMGame>();
         PoolInit();
         LoadSettings();
     }
@@ -285,7 +284,7 @@ public class LevelScript : MonoBehaviour
         // Check if this cell is on the border/edge of the grid
         if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
         {
-            return "Cell_Center_" + GetRandomRange(1, 3).ToString();
+            return "Cell_Center_" + usmGame.GetRandomRange(1, 3).ToString();
         }
 
         // Check 4-directional neighbors
@@ -298,7 +297,7 @@ public class LevelScript : MonoBehaviour
         if (!hasTop && hasBottom)
         {
             // Only bottom neighbor - use top asset
-            return "Cell_Top_" + GetRandomRange(1, 3).ToString();
+            return "Cell_Top_" + usmGame.GetRandomRange(1, 3).ToString();
         }
         else if (hasTop && !hasBottom && !hasLeft && !hasRight)
         {
@@ -308,7 +307,7 @@ public class LevelScript : MonoBehaviour
         else if (hasLeft && !hasRight)
         {
             // Only left neighbor - use right asset
-            return "Cell_Side_Right_" + GetRandomRange(1, 3).ToString();
+            return "Cell_Side_Right_" + usmGame.GetRandomRange(1, 3).ToString();
         }
         else if (!hasLeft && hasRight)
         {
@@ -318,7 +317,7 @@ public class LevelScript : MonoBehaviour
         else if ((hasTop && hasBottom) || (hasLeft && hasRight))
         {
             // Connected in straight line (vertical or horizontal) - use center variation
-            return "Cell_Center_" + GetRandomRange(1, 3).ToString();
+            return "Cell_Center_" + usmGame.GetRandomRange(1, 3).ToString();
         }
         // else if (hasTop || hasBottom || hasLeft || hasRight)
         // {
@@ -469,7 +468,7 @@ public class LevelScript : MonoBehaviour
                 int decorationType = GetRandomDecorationType();
 
                 // Random patch size
-                int patchSize = GetRandomRange(decorationPatchMinSize, decorationPatchMaxSize + 1);
+                int patchSize = usmGame.GetRandomRange(decorationPatchMinSize, decorationPatchMaxSize + 1);
 
                 // Fill patch using flood fill
                 FillDecorationPatch(x, y, decorationType, patchSize);
@@ -560,7 +559,7 @@ public class LevelScript : MonoBehaviour
     private int GetRandomDecorationType()
     {
         float totalWeight = grassChance + grassCoverChance + mushroomChance + stoneChance + webChance;
-        float randomValue = GetRandomValue() * totalWeight;
+        float randomValue = usmGame.GetRandomValue() * totalWeight;
 
         if (randomValue < grassChance) return 0; // Grass
         randomValue -= grassChance;
@@ -629,32 +628,7 @@ public class LevelScript : MonoBehaviour
     #endregion
 
     #region Random Utilities
-    private void InitializeRandomState()
-    {
-        Random.InitState(randomSeed);
-        randomState = Random.state;
-    }
-
-    private void RestoreRandomState()
-    {
-        Random.state = randomState;
-    }
-
-    private int GetRandomRange(int min, int max)
-    {
-        RestoreRandomState();
-        int result = Random.Range(min, max);
-        randomState = Random.state;
-        return result;
-    }
-
-    private float GetRandomValue()
-    {
-        RestoreRandomState();
-        float result = Random.value;
-        randomState = Random.state;
-        return result;
-    }
+    // Seed and state are now managed by USMGame
     #endregion
 
     #region Utility Methods
@@ -692,15 +666,6 @@ public class LevelScript : MonoBehaviour
             PlayerPrefs.SetFloat(prefix + "PerlinThreshold", perlinThreshold);
             PlayerPrefs.SetFloat(prefix + "PerlinWidth", perlinWidth);
             PlayerPrefs.SetFloat(prefix + "PerlinHeight", perlinHeight);
-            PlayerPrefs.SetInt(prefix + "RandomSeed", randomSeed);
-            PlayerPrefs.SetInt(prefix + "BlockBackDistance", blockBackDistance);
-            PlayerPrefs.SetInt(prefix + "BlockBackMinDistance", blockBackMinDistance);
-            PlayerPrefs.SetInt(prefix + "BlockBackMaxDistance", blockBackMaxDistance);
-            PlayerPrefs.SetInt(prefix + "BlockBackRandomDistance", blockBackRandomDistance ? 1 : 0);
-            PlayerPrefs.SetInt(prefix + "BlockBackPatchMinSize", blockBackPatchMinSize);
-            PlayerPrefs.SetInt(prefix + "BlockBackPatchMaxSize", blockBackPatchMaxSize);
-            PlayerPrefs.SetInt(prefix + "DecorationPatchMinSize", decorationPatchMinSize);
-            PlayerPrefs.SetInt(prefix + "DecorationPatchMaxSize", decorationPatchMaxSize);
             PlayerPrefs.SetFloat(prefix + "GlobalLightIntensity", globalLightIntensity);
             PlayerPrefs.SetFloat(prefix + "CellSize", cellSize);
             PlayerPrefs.SetFloat(prefix + "RegenerationDelay", regenerationDelay);
@@ -726,7 +691,7 @@ public class LevelScript : MonoBehaviour
             PlayerPrefs.SetFloat("LevelScript_PerlinThreshold", perlinThreshold);
             PlayerPrefs.SetFloat("LevelScript_PerlinWidth", perlinWidth);
             PlayerPrefs.SetFloat("LevelScript_PerlinHeight", perlinHeight);
-            PlayerPrefs.SetInt("LevelScript_RandomSeed", randomSeed);
+            if (usmGame != null) PlayerPrefs.SetInt("LevelScript_RandomSeed", usmGame.RandomSeed);
             PlayerPrefs.SetFloat("LevelScript_GlobalLightIntensity", globalLightIntensity);
             PlayerPrefs.SetFloat("LevelScript_CellSize", cellSize);
             PlayerPrefs.SetFloat("LevelScript_RegenerationDelay", regenerationDelay);
@@ -765,7 +730,7 @@ public class LevelScript : MonoBehaviour
         perlinThreshold = DEFAULT_PERLIN_THRESHOLD;
         perlinWidth = DEFAULT_PERLIN_WIDTH;
         perlinHeight = DEFAULT_PERLIN_HEIGHT;
-        randomSeed = DEFAULT_RANDOM_SEED;
+        if (usmGame != null) usmGame.RandomSeed = 1234;
         blockBackDistance = DEFAULT_BLOCK_BACK_DISTANCE;
         blockBackMinDistance = DEFAULT_BLOCK_BACK_MIN_DISTANCE;
         blockBackMaxDistance = DEFAULT_BLOCK_BACK_MAX_DISTANCE;
@@ -789,9 +754,9 @@ public class LevelScript : MonoBehaviour
     public int CreateWithNewSeed(int randomSeed = 0, int width = 0, int height = 0)
     {
         if (randomSeed != 0)
-            this.randomSeed = randomSeed;
+            usmGame.RandomSeed = randomSeed;
         else
-            this.randomSeed = UnityEngine.Random.Range(0, 99999);
+            usmGame.RandomSeed = UnityEngine.Random.Range(0, 99999);
 
         if (width != 0)
             this.width = width;
@@ -804,7 +769,7 @@ public class LevelScript : MonoBehaviour
         Create(this.width, this.height);
 
 
-        return this.randomSeed;
+        return usmGame != null ? usmGame.RandomSeed : 0;
     }
 
     public void SaveProfile(string profileName)
@@ -836,7 +801,7 @@ public class LevelScript : MonoBehaviour
         PlayerPrefs.SetFloat(prefix + "PerlinThreshold", perlinThreshold);
         PlayerPrefs.SetFloat(prefix + "PerlinWidth", perlinWidth);
         PlayerPrefs.SetFloat(prefix + "PerlinHeight", perlinHeight);
-        PlayerPrefs.SetInt(prefix + "RandomSeed", randomSeed);
+        if (usmGame != null) PlayerPrefs.SetInt(prefix + "RandomSeed", usmGame.RandomSeed);
         PlayerPrefs.SetInt(prefix + "BlockBackDistance", blockBackDistance);
         PlayerPrefs.SetInt(prefix + "BlockBackMinDistance", blockBackMinDistance);
         PlayerPrefs.SetInt(prefix + "BlockBackMaxDistance", blockBackMaxDistance);
@@ -882,7 +847,7 @@ public class LevelScript : MonoBehaviour
         perlinThreshold = PlayerPrefs.GetFloat(prefix + "PerlinThreshold", DEFAULT_PERLIN_THRESHOLD);
         perlinWidth = PlayerPrefs.GetFloat(prefix + "PerlinWidth", DEFAULT_PERLIN_WIDTH);
         perlinHeight = PlayerPrefs.GetFloat(prefix + "PerlinHeight", DEFAULT_PERLIN_HEIGHT);
-        randomSeed = PlayerPrefs.GetInt(prefix + "RandomSeed", DEFAULT_RANDOM_SEED);
+        if (usmGame != null) usmGame.RandomSeed = PlayerPrefs.GetInt(prefix + "RandomSeed", 1234);
         blockBackDistance = PlayerPrefs.GetInt(prefix + "BlockBackDistance", DEFAULT_BLOCK_BACK_DISTANCE);
         blockBackMinDistance = PlayerPrefs.GetInt(prefix + "BlockBackMinDistance", DEFAULT_BLOCK_BACK_MIN_DISTANCE);
         blockBackMaxDistance = PlayerPrefs.GetInt(prefix + "BlockBackMaxDistance", DEFAULT_BLOCK_BACK_MAX_DISTANCE);
@@ -1013,11 +978,11 @@ public class LevelScript : MonoBehaviour
             return;
         }
 
-        // Use the randomSeed field instead of generating a random one
-        int seed = randomSeed;
+        // Use the seed from USMGame
+        int seed = usmGame.RandomSeed;
 
-        // Initialize deterministic random state
-        InitializeRandomState();
+        // Initialize deterministic random state in USMGame
+        usmGame.InitializeRandomState();
 
         // Set the Perlin noise scaling factors in MazeGenerator
         MazeGenerator.PerlinWidth = perlinWidth;
@@ -1118,22 +1083,22 @@ public class LevelScript : MonoBehaviour
                 switch (decorationType)
                 {
                     case 0: // Grass
-                        spriteName = grassNames[GetRandomRange(0, grassNames.Length)];
+                        spriteName = grassNames[usmGame.GetRandomRange(0, grassNames.Length)];
                         position = new Vector2(x, y + 1);
                         break;
 
                     case 1: // GrassCover
-                        spriteName = grassCoverNames[GetRandomRange(0, grassCoverNames.Length)];
+                        spriteName = grassCoverNames[usmGame.GetRandomRange(0, grassCoverNames.Length)];
                         position = new Vector2(x, y);
                         break;
 
                     case 2: // Mushroom
-                        spriteName = mushroomNames[GetRandomRange(0, mushroomNames.Length)];
+                        spriteName = mushroomNames[usmGame.GetRandomRange(0, mushroomNames.Length)];
                         position = new Vector2(x, y + 1);
                         break;
 
                     case 3: // Stone
-                        spriteName = stoneNames[GetRandomRange(0, stoneNames.Length)];
+                        spriteName = stoneNames[usmGame.GetRandomRange(0, stoneNames.Length)];
                         position = new Vector2(x, y + 1);
                         break;
 
@@ -1145,7 +1110,7 @@ public class LevelScript : MonoBehaviour
                             grid[y + 1, x] == MazeGenerator.MazeCell.SOLID &&
                             grid[y, x] == MazeGenerator.MazeCell.EMPTY)
                         {
-                            spriteName = webLeftNames[GetRandomRange(0, webLeftNames.Length)];
+                            spriteName = webLeftNames[usmGame.GetRandomRange(0, webLeftNames.Length)];
                             position = new Vector2(x, y);
                         }
                         else if (x < width - 1 && y < height - 1 &&
@@ -1154,7 +1119,7 @@ public class LevelScript : MonoBehaviour
                                  grid[y + 1, x] == MazeGenerator.MazeCell.SOLID &&
                                  grid[y, x] == MazeGenerator.MazeCell.EMPTY)
                         {
-                            spriteName = webRightNames[GetRandomRange(0, webRightNames.Length)];
+                            spriteName = webRightNames[usmGame.GetRandomRange(0, webRightNames.Length)];
                             position = new Vector2(x, y);
                         }
                         break;
@@ -1189,7 +1154,7 @@ public class LevelScript : MonoBehaviour
             for (int y = 0; y < height; y++)
             {
                 // Check if we should place a GemStack here based on chance
-                if (GetRandomValue() > gemChance) continue;
+                if (usmGame.GetRandomValue() > gemChance) continue;
 
                 Vector2 position;
                 float rotation;
@@ -1197,7 +1162,7 @@ public class LevelScript : MonoBehaviour
                 // Check if this location is suitable for GemStack placement
                 if (IsGemStackSuitable(x, y, out position, out rotation))
                 {
-                    string spriteName = gemStackNames[GetRandomRange(0, gemStackNames.Length)];
+                    string spriteName = gemStackNames[usmGame.GetRandomRange(0, gemStackNames.Length)];
                     var gemStackObject = SpawnGameObject(spriteName, position);
 
                     // Apply rotation based on surface orientation

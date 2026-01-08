@@ -9,6 +9,7 @@ public class GameMode_3Levels : MonoBehaviour, IGameLogic
     #region Fields
 
     private UnifiedSyncMatrix usm;
+    private USMGame usmGame;
     private LevelScript levelScript;
     private GameObject player;
     private int currentLevel;
@@ -89,7 +90,7 @@ public class GameMode_3Levels : MonoBehaviour, IGameLogic
 
 
 
-        var usmGame = FindFirstObjectByType<USMGame>();
+        usmGame = FindFirstObjectByType<USMGame>();
         if (!usmGame.NoLevelInit)
         {
             GenerateLevel();
@@ -196,7 +197,7 @@ public class GameMode_3Levels : MonoBehaviour, IGameLogic
     {
         if (usm.GameMode == UnifiedSyncMatrix.GAMEMODE.MULTIPLAYER_HOST)
         {
-            int currentSeed = levelScript.randomSeedGet;
+            int currentSeed = usmGame.RandomSeed;
             int width = levelScript.widthGet();
             int height = levelScript.heightGet();
             usm.SendGameMessage("NewLevelSeed", $"{currentSeed},{width},{height}");
