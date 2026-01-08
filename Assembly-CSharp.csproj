@@ -92,6 +92,7 @@
     <Compile Include="Assets/Scripts/USM/IUSMNetworkSync.cs" />
     <Compile Include="Assets/Scripts/NET/Core/NETCoreDesktop.cs" />
     <Compile Include="Assets/Scripts/GAME/ChildCountChanged.cs" />
+    <Compile Include="Assets/Scripts/PixelBlock.cs" />
     <Compile Include="Assets/Scripts/Ship Lever.cs" />
     <Compile Include="Assets/Scripts/UI/IBroadcast.cs" />
     <Compile Include="Assets/Scripts/Lever.cs" />
