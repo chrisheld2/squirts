@@ -138,11 +138,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::USMNode
   nodeID: 
+  clientGUID: 
   nodeType: 1
-  syncEventName: 
-  scanned: 0
   liveNode: 0
   gameObjectName: 
+  syncEventName: 
+  scanned: 0
   positionThreshold: 0.1
   rotationThreshold: 5
   velocityThreshold: 0.1
@@ -154,8 +155,11 @@ MonoBehaviour:
   swapTriggerRadius: 1
   swapTriggerOffset: {x: 0, y: 0}
   swapCooldown: 1.5
+  alwaysUseWorldSpace: 1
+  enableSpriteColoring: 1
 --- !u!212 &3049215225944808071
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -201,6 +205,7 @@ SpriteRenderer:
   m_SortingLayerID: 884375587
   m_SortingLayer: 11
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f708dd87dae594f2f843602893db4c94, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -210,7 +215,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &3822561766155732017
 Rigidbody2D:
@@ -252,8 +256,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startIntensity: 8
-  startingLife: 3
-  fadeMultiplier: 0.5
+  startingLife: 1
+  fadeDuration: 5
 --- !u!58 &3452850237476698910
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -515,11 +519,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5315372145062417155, guid: 346fdcac2e7ac4765aa39489650c7ba5, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1.5
+      value: 9999
       objectReference: {fileID: 0}
     - target: {fileID: 5315372145062417155, guid: 346fdcac2e7ac4765aa39489650c7ba5, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1.2
+      value: 9999
       objectReference: {fileID: 0}
     - target: {fileID: 5315372145062417155, guid: 346fdcac2e7ac4765aa39489650c7ba5, type: 3}
       propertyPath: m_LocalPosition.x
