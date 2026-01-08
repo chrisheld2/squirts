@@ -16,6 +16,10 @@ public class PlayerPrefsViewerWindow : EditorWindow
     private string newKeyName = "";
     private PlayerPrefsType newKeyType = PlayerPrefsType.String;
     
+    // Defer actions to prevent GUI group imbalance
+    private bool needsExitGUI = false;
+    private PlayerPrefEntry entryToDelete = null;
+    
     // List of keys to display
     private List<PlayerPrefEntry> entries = new List<PlayerPrefEntry>();
     
@@ -175,12 +179,12 @@ public class PlayerPrefsViewerWindow : EditorWindow
         if (GUILayout.Button("Expand All", EditorStyles.toolbarButton, GUILayout.Width(80)))
         {
             SetAllFoldouts(true);
-            GUIUtility.ExitGUI();
+            needsExitGUI = true;
         }
         if (GUILayout.Button("Collapse All", EditorStyles.toolbarButton, GUILayout.Width(80)))
         {
             SetAllFoldouts(false);
-            GUIUtility.ExitGUI();
+            needsExitGUI = true;
         }
         
         GUILayout.FlexibleSpace();
@@ -194,7 +198,7 @@ public class PlayerPrefsViewerWindow : EditorWindow
         {
             searchFilter = "";
             GUI.FocusControl(null);
-            GUIUtility.ExitGUI();
+            needsExitGUI = true;
         }
         
         EditorGUILayout.EndHorizontal();
@@ -268,6 +272,22 @@ public class PlayerPrefsViewerWindow : EditorWindow
             }
             EditorGUILayout.EndHorizontal();
         }
+
+        // Finalize any deferred actions
+        if (entryToDelete != null)
+        {
+            PlayerPrefs.DeleteKey(entryToDelete.Key);
+            PlayerPrefs.Save();
+            entries.Remove(entryToDelete);
+            entryToDelete = null;
+            needsExitGUI = true;
+        }
+
+        if (needsExitGUI)
+        {
+            needsExitGUI = false;
+            GUIUtility.ExitGUI();
+        }
     }
 
     private void DrawEntry(PlayerPrefEntry entry)
@@ -338,10 +358,7 @@ public class PlayerPrefsViewerWindow : EditorWindow
         {
             if (EditorUtility.DisplayDialog("Delete Key", $"Delete '{entry.Key}'?", "Yes", "No"))
             {
-                PlayerPrefs.DeleteKey(entry.Key);
-                PlayerPrefs.Save();
-                entries.Remove(entry);
-                GUIUtility.ExitGUI();
+                entryToDelete = entry;
             }
         }
         

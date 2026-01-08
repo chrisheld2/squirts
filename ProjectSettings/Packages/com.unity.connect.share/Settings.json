@@ -19,7 +19,7 @@
             {
                 "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "buildOutputDirList",
-                "value": "{\"m_Value\":\"/Users/christopherheld/Development/Game Development/Squirts 2D Project/Builds/WebGL;/Users/christopherheld/Development/Game Development/WebSocketServerDotNet/wwwroot/game;/Users/christopherheld/Development/Game Development/WebSocketServerDotNet/wwwroot/game/AllInOne;/Users/christopherheld/Development/Game Development/Squirts 2D Project/WebGL Builds/PublishMe;/Users/christopherheld/Development/Game Development/monsterscoming .nosync/WebGL Builds;/Users/christopherheld/Documents/Game Development/monsterscoming .nosync/WebGL Builds;/Users/christopherheld/Documents/Game Development/monsterscoming .nosync/WebGL Builds/Demo1;;;\"}"
+                "value": "{\"m_Value\":\"/Users/christopherheld/Development/Game Development/The Bottomless Pit 2D Project/Builds/WebGL;/Users/christopherheld/Development/Game Development/WebSocketServerDotNet/wwwroot/game;/Users/christopherheld/Development/Game Development/WebSocketServerDotNet/wwwroot/game/AllInOne;/Users/christopherheld/Development/Game Development/The Bottomless Pit 2D Project/WebGL Builds/PublishMe;/Users/christopherheld/Development/Game Development/monsterscoming .nosync/WebGL Builds;/Users/christopherheld/Documents/Game Development/monsterscoming .nosync/WebGL Builds;/Users/christopherheld/Documents/Game Development/monsterscoming .nosync/WebGL Builds/Demo1;;;\"}"
             }
         ]
     }

@@ -52,13 +52,32 @@ namespace Bundos.WaterSystem
 
         public void Initialize()
         {
-            mesh = new Mesh()
-            {
-                name = "WaterMesh"
-            };
+            if (meshFilter == null) meshFilter = GetComponent<MeshFilter>();
 
-            meshFilter = GetComponent<MeshFilter>();
-            meshFilter.mesh = mesh;
+            if (Application.isPlaying)
+            {
+                if (mesh == null)
+                {
+                    mesh = new Mesh() { name = "WaterMesh" };
+                    meshFilter.mesh = mesh;
+                }
+                else
+                {
+                    mesh = meshFilter.mesh;
+                }
+            }
+            else
+            {
+                if (meshFilter.sharedMesh == null || meshFilter.sharedMesh.name != "WaterMesh")
+                {
+                    mesh = new Mesh() { name = "WaterMesh", hideFlags = HideFlags.DontSave };
+                    meshFilter.sharedMesh = mesh;
+                }
+                else
+                {
+                    mesh = meshFilter.sharedMesh;
+                }
+            }
         }
 
         private void InitializeSprings()

@@ -17,7 +17,7 @@ public class USMGame : MonoBehaviour
     private GameObject panelMainMenuContainer;
 
     [SerializeField]
-    private bool testMode;
+    private bool noLevelInit;
     [SerializeField]
     private UnifiedSyncMatrix.GAMEMODE gameMode = UnifiedSyncMatrix.GAMEMODE.SINGLEPLAYER;
 
@@ -47,7 +47,7 @@ public class USMGame : MonoBehaviour
     /// <summary>
     /// Gets whether the UnifiedSyncMatrix is in test mode.
     /// </summary>
-    public bool TestMode => testMode;
+    public bool NoLevelInit => noLevelInit;
 
     /// <summary>
     /// Gets the current game mode.
@@ -331,8 +331,8 @@ public class USMGame : MonoBehaviour
         // Send current game speed to the new client so they sync up immediately
         if (usm.GameMode == UnifiedSyncMatrix.GAMEMODE.MULTIPLAYER_HOST)
         {
-             usm.SendGameMessage("GAME_SPEED", gameSpeed.ToString("F2"));
-             DL.Log($"[USMGame] Sent GAME_SPEED ({gameSpeed:F2}) to newly joined client {clientGUID}", "lime");
+            usm.SendGameMessage("GAME_SPEED", gameSpeed.ToString("F2"));
+            DL.Log($"[USMGame] Sent GAME_SPEED ({gameSpeed:F2}) to newly joined client {clientGUID}", "lime");
         }
     }
 
@@ -433,8 +433,8 @@ public class USMGame : MonoBehaviour
 
         var panelDebug = GameObject.Find("PanelDebug");
 
-        panelMainMenuContainer = GameObject.Find("PanelMainMenuContainer");
 
+        panelMainMenuContainer = GameObject.Find("PanelMainMenuContainer");
         Transform sessionGUIDTransform = panelDebug.transform.Find("TextSessionGUID");
         textSessionGUID = sessionGUIDTransform.GetComponent<TextMeshProUGUI>();
 

@@ -90,7 +90,7 @@ public class GameMode_3Levels : MonoBehaviour, IGameLogic
 
 
         var usmGame = FindFirstObjectByType<USMGame>();
-        if (!usmGame.TestMode)
+        if (!usmGame.NoLevelInit)
         {
             GenerateLevel();
 
@@ -210,7 +210,7 @@ public class GameMode_3Levels : MonoBehaviour, IGameLogic
             case "NewLevelSeed":
                 // Check if we're in test mode - if so, skip level generation
                 var usmGame = FindFirstObjectByType<USMGame>();
-                if (usmGame != null && usmGame.TestMode)
+                if (usmGame != null && usmGame.NoLevelInit)
                 {
                     DL.Log("TestMode is enabled - skipping level generation from network message", "yellow");
                     return;
