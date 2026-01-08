@@ -5,11 +5,9 @@ public class RandomDecoration : MonoBehaviour
     [Header("RANDOM DEACTIVATION")]
     [SerializeField][Range(0, 100)] private float deactivationChance = 50f;
 
-    public void Start()
+    private void Awake()
     {
-        float randomValue = Random.Range(0f, 100f);
-
-        if (randomValue <= deactivationChance)
+        if (Random.value * 100f <= deactivationChance)
         {
             gameObject.SetActive(false);
         }
